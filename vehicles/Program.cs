@@ -1,9 +1,11 @@
 ﻿namespace Garage
 {
 
-
     class Program
     {
+
+///////////////////////////////////////////////////////////////////////
+//USING INTERFACE
         static void Main(string[] args) 
         {
             Zero fxs = new Zero();
@@ -61,9 +63,6 @@
     }
 
 
-    ///////////////////////////////////////////////////////////////////////
-    //INTERFACE
-
     public interface IGas
     {
 
@@ -117,7 +116,8 @@
     
 
 ///////////////////////////////////////////////////////////////////////////
-// INHERITANCE 
+// USING INHERITANCE 
+
     // public class GasVehicle
     // {
     //     public string MainColor { get; set; }
