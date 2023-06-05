@@ -6,158 +6,228 @@
     {
         static void Main(string[] args) 
         {
-            Zero fxs = new Zero(){
-                MainColor = "black",
-                MaximumOccupancy = 1,
-                BatteryKWh = 14
+            Zero fxs = new Zero();
+            Zero fx = new Zero();
+            Tesla modelS = new Tesla();
+
+            List<IElectric> electricVehicles = new List<IElectric>() {
+                fx, fxs, modelS
             };
 
-            Cessna mx410 = new Cessna(){
-                MainColor = "white",
-                MaximumOccupancy = 2,
-                FuelCapacity = 40
+            Console.WriteLine("Electric Vehicles");
+            foreach(IElectric ev in electricVehicles)
+            {
+                Console.WriteLine($"{ev.CurrentChargePercentage}");
+            }
+
+            foreach(IElectric ev in electricVehicles)
+            {
+                // This should charge the vehicle to 100%
+                ev.ChargeBattery();
+            }
+
+            foreach(IElectric ev in electricVehicles)
+            {
+                Console.WriteLine($"{ev.CurrentChargePercentage}");
+            }
+
+            /***********************************************/
+
+            Ram ram = new Ram ();
+            Cessna cessna150 = new Cessna ();
+
+            List<IGas> gasVehicles = new List<IGas>() {
+                ram, cessna150
             };
 
-            Tesla modelS = new Tesla(){
-                MainColor = "Silver",
-                MaximumOccupancy = 4,
-                BatteryKWh = 90
-            };
+            Console.WriteLine("Gas Vehicles");
+            foreach(IGas gv in gasVehicles)
+            {
+                Console.WriteLine($"{gv.CurrentTankPercentage}");
+            }
 
-            Ram r1500 = new Ram(){
-                MainColor = "blue",
-                MaximumOccupancy = 2,
-                FuelCapacity = 20
-            };
+            foreach(IGas gv in gasVehicles)
+            {
+                // This should completely refuel the gas tank
+                gv.RefuelTank();
+            }
 
-            fxs.Drive();
-            fxs.Turn("left");
-            fxs.Stop();
-            
-            mx410.Drive();
-            mx410.Turn("right");
-            mx410.Stop();
-
-            modelS.Drive();
-            modelS.Turn("around");
-            modelS.Stop();
-
-            r1500.Drive();
-            r1500.Turn("upside down");
-            r1500.Stop();
+            foreach(IGas gv in gasVehicles)
+            {
+                Console.WriteLine($"{gv.CurrentTankPercentage}");
+            }
 
         }
     }
 
 
-    public class GasVehicle
+    ///////////////////////////////////////////////////////////////////////
+    //INTERFACE
+
+    public interface IGas
     {
-        public string MainColor { get; set; }
-        public int MaximumOccupancy { get; set; }
-        public double FuelCapacity { get; set; }
-        public void RefuelTank()
-        {
-            // method definition omitted
-        }
-        public virtual void Drive()
-        {
-            //console.writeline drive message
-        }
-        public virtual void Turn(string direction)
-        {
-            //console.writeline turn message
-        }
-        public virtual void Stop()
-        {
-            //console.writeline stop message
-        }
+
+        int CurrentTankPercentage { get; }
+        void RefuelTank();
+
     }
 
-    public class ElectricVehicle
+    public interface IElectric
     {
-        public string MainColor { get; set; }
-        public int MaximumOccupancy { get; set; }
-        public double BatteryKWh { get; set; }
+        int CurrentChargePercentage { get; }
+        void ChargeBattery();
+
+    }
+
+    public class Zero : IElectric // EV
+    {
+        public int CurrentChargePercentage { get; set; } = 70;
         public void ChargeBattery()
         {
-            // method definition omitted
-        }
-        public virtual void Drive()
-        {
-            //console.writeline drive message
-        }
-        public virtual void Turn(string direction)
-        {
-            //console.writeline turn message
-        }
-        public virtual void Stop()
-        {
-            //console.writeline stop message
+            CurrentChargePercentage = 100;
         }
     }
 
-    public class Zero : ElectricVehicle // Electric motorcycle
+    public class Tesla : IElectric // EV
     {
-        public override void Drive()
+        public int CurrentChargePercentage { get; set; } = 70;
+        public void ChargeBattery()
         {
-            Console.WriteLine($"The {MainColor} Zero drives past. Zoooom!");
+            CurrentChargePercentage = 100;
         }
-        public override void Turn(string direction)
+    }
+
+    public class Cessna : IGas // GAS 
+    {
+        public int CurrentTankPercentage { get; set; } = 30;
+        public void RefuelTank()
         {
-            Console.WriteLine($"The Zero turned {direction}.");
+            CurrentTankPercentage = 100;
         }
-        public override void Stop()
+    }
+
+    public class Ram : IGas // GAS 
+    {
+        public int CurrentTankPercentage { get; set; } = 30;
+        public void RefuelTank()
         {
-            Console.WriteLine($"The Zero stopped.");
+            CurrentTankPercentage = 100;
         }
+    }
+    
+
+///////////////////////////////////////////////////////////////////////////
+// INHERITANCE 
+    // public class GasVehicle
+    // {
+    //     public string MainColor { get; set; }
+    //     public int MaximumOccupancy { get; set; }
+    //     public double FuelCapacity { get; set; }
+    //     public void RefuelTank()
+    //     {
+    //         // method definition omitted
+    //     }
+    //     public virtual void Drive()
+    //     {
+    //         //console.writeline drive message
+    //     }
+    //     public virtual void Turn(string direction)
+    //     {
+    //         //console.writeline turn message
+    //     }
+    //     public virtual void Stop()
+    //     {
+    //         //console.writeline stop message
+    //     }
+    // }
+
+    // public class ElectricVehicle
+    // {
+    //     public string MainColor { get; set; }
+    //     public int MaximumOccupancy { get; set; }
+    //     public double BatteryKWh { get; set; }
+    //     public void ChargeBattery()
+    //     {
+    //         // method definition omitted
+    //     }
+    //     public virtual void Drive()
+    //     {
+    //         //console.writeline drive message
+    //     }
+    //     public virtual void Turn(string direction)
+    //     {
+    //         //console.writeline turn message
+    //     }
+    //     public virtual void Stop()
+    //     {
+    //         //console.writeline stop message
+    //     }
+    // }
+
+    // public class Zero : IElectric // Electric motorcycle
+    // {
+    //     public override void Drive()
+    //     {
+    //         Console.WriteLine($"The {MainColor} Zero drives past. Zoooom!");
+    //     }
+    //     public override void Turn(string direction)
+    //     {
+    //         Console.WriteLine($"The Zero turned {direction}.");
+    //     }
+    //     public override void Stop()
+    //     {
+    //         Console.WriteLine($"The Zero stopped.");
+    //     }
  
-    }
+    // }
 
-    public class Cessna : GasVehicle// Gas powered light aircraft
-    {
-        public override void Drive()
-        {
-            Console.WriteLine($"The {MainColor} Cessna flies past. Vroom!");
-        }
-        public override void Turn(string direction)
-        {
-            Console.WriteLine($"The Cessna turned {direction}.");
-        }
-        public override void Stop()
-        {
-            Console.WriteLine($"The Cessna landed.");
-        }
-    }
+    // public class Cessna : IGas// Gas powered light aircraft
+    // {
+    //     public override void Drive()
+    //     {
+    //         Console.WriteLine($"The {MainColor} Cessna flies past. Vroom!");
+    //     }
+    //     public override void Turn(string direction)
+    //     {
+    //         Console.WriteLine($"The Cessna turned {direction}.");
+    //     }
+    //     public override void Stop()
+    //     {
+    //         Console.WriteLine($"The Cessna landed.");
+    //     }
+    // }
 
-    public class Tesla : ElectricVehicle// Electric car
-    {
-        public override void Drive()
-        {
-            Console.WriteLine($"The {MainColor} Tesla drives past. Zoooom!");
-        }
-        public override void Turn(string direction)
-        {
-            Console.WriteLine($"The Tesla turned {direction}.");
-        }
-        public override void Stop()
-        {
-            Console.WriteLine($"The Tesla came to a stop.");
-        }
-    }
+    // public class Tesla : IElectric// Electric car
+    // {
+    //     public override void Drive()
+    //     {
+    //         Console.WriteLine($"The {MainColor} Tesla drives past. Zoooom!");
+    //     }
+    //     public override void Turn(string direction)
+    //     {
+    //         Console.WriteLine($"The Tesla turned {direction}.");
+    //     }
+    //     public override void Stop()
+    //     {
+    //         Console.WriteLine($"The Tesla came to a stop.");
+    //     }
+    // }
 
-    public class Ram : GasVehicle// Gas powered truck
-    {
-        public override void Drive()
-        {
-            Console.WriteLine($"The {MainColor} Ram drives past. Vroom!");
-        }
-        public override void Turn(string direction)
-        {
-            Console.WriteLine($"The Ram turned {direction}.");
-        }
-        public override void Stop()
-        {
-            Console.WriteLine($"The Ram stopped running.");
-        }
-    }
+    // public class Ram : IGas// Gas powered truck
+    // {
+    //     public override void Drive()
+    //     {
+    //         Console.WriteLine($"The {MainColor} Ram drives past. Vroom!");
+    //     }
+    //     public override void Turn(string direction)
+    //     {
+    //         Console.WriteLine($"The Ram turned {direction}.");
+    //     }
+    //     public override void Stop()
+    //     {
+    //         Console.WriteLine($"The Ram stopped running.");
+    //     }
+    // }
+
+
 }
